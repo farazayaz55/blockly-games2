@@ -51,12 +51,16 @@ Maze.Blocks.init = function() {
 
   const move_DIRECTIONS = [
     ["North ↑ ", 'moveForward'],
-    ["South ↓", 'moveBackward']
+    ["South ↓", 'moveBackward'],
+    ["Dance",'shake'],
   ];
   const TURN_DIRECTIONS = [
     ["East", 'turnLeft'],
     ["West", 'turnRight']
   ];
+  const dance=[
+    ["Dance",'shake']//shake is the name where we wrap our functionality of dance
+  ]
 
   const PATH_DIRECTIONS = [
     [BlocklyGames.getMsg('Maze.pathAhead', false), 'isPathForward'],
@@ -219,8 +223,12 @@ Maze.Blocks.init = function() {
 
 Blockly.JavaScript['maze_moveForward'] = function(block) {
   // Generate JavaScript for moving forward.
-  return `moveForward('block_id_${block.id}');\n`;
+  //return 'moveForward('block_id_${block.id}');\n';
+  return `${block.getFieldValue('DIR')}('block_id_${block.id}');\n`;
 };
+
+
+
 
 
 

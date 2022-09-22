@@ -434,7 +434,7 @@ function init() {
   // Render the HTML.
   document.body.innerHTML = Maze.html.start(
       {lang: BlocklyGames.LANG,
-       level: BlocklyGames.Level,
+       level: BlocklyGames.LEVEL,
        maxLevel: BlocklyGames.MAX_LEVEL,
        skin: SKIN_ID,
        html: BlocklyGames.IS_HTML});
@@ -497,7 +497,7 @@ function init() {
   // Not really needed, there are no user-defined functions or variables.
   Blockly.JavaScript.addReservedWords('moveForward,moveBackward,' +
       'turnRight,turnLeft,isPathForward,isPathRight,isPathBackward,isPathLeft'+
-      'moveNorth','moveSouth','moveEast','moveWest'
+      'moveNorth','moveSouth','moveEast','moveWest','shake'
       );
 
   drawMap();
@@ -952,19 +952,66 @@ function initInterpreter(interpreter, globalObject) {
   // API
   let wrapper;
   wrapper = function(id) {
+    console.log("Move Forward ");
     movefaraz(1,id);
   };
   wrap('moveForward');
 
   wrapper = function(id) {
+    console.log("Move Backward called");
     movefaraz(4, id);
   };
   wrap('moveBackward');
 
   wrapper = function(id) {
+    console.log("Shake is called");
+    // shake(1,id);
+    // shake(1,id);
+    // shake(4,id);
+    // shake(4,id);
+    if(pathFaraz(1,null))
+    {
+        //you can go 1
+      console.log("YOU CAN GO UP");
+      for(let i=1;i<=3;i++){
+        movefaraz(1,id);
+        movefaraz(4,id);
+      }
+    }
+    if(pathFaraz(2,null))
+    {
+      console.log("YOU CAN GO right");
+      //you can go 1
+      for(let i=1;i<=3;i++){
+        movefaraz(2,id);
+        movefaraz(3,id);
+      }
+    }
+    if(pathFaraz(3,null))
+    {
+        //you can go 1
+        for(let i=1;i<=3;i++){
+          movefaraz(3,id);
+          movefaraz(2,id);
+        }
+    }
+    if(pathFaraz(4,null))
+    {
+        //you can go 1
+        for(let i=1;i<=3;i++){
+          movefaraz(4,id);
+          movefaraz(1,id);
+        }
+    }
+    //1234 news
+  };
+  wrap('shake');
+
+  wrapper = function(id) {
     movefaraz(3,id);
   };
   wrap('turnLeft');
+
 
   wrapper = function(id) {
     // turn(1, id);
@@ -1520,6 +1567,104 @@ function pathFaraz(direction,id)
   }
 }
 
+// function shake(direction,id)
+// {
+//     //if dir =1 N
+//   //dir=2 E
+//   //dir =3 w
+//   //dir =4 south
+//   console.log("Move shake is called");
+//   console.log("Directions is ",direction);
+//   var effectiveDirection;
+//   let command;
+//   //have to write is path function
+//   if(direction==3)//have to go to west
+//   {
+//     console.log("move to west");
+//     console.log(pegmanD);
+//     //mod must be 3
+//     if(pegmanD%4==0)
+//     {
+//       effectiveDirection=pegmanD+3;
+//     }
+//     if(pegmanD%4==2)
+//     {
+//       effectiveDirection=pegmanD+1;
+//     }
+//     if(pegmanD%4==1)
+//     {
+//       effectiveDirection=pegmanD+2;
+//     }
+//     pegmanX--;
+//     command = 'west';
+//     log.push([command, id]);
+//   }
+
+
+//   if(direction==2)//have to go to east
+//   {
+//     console.log("move to east");
+//     console.log(pegmanD);
+//     //mod must be 1
+//     if(pegmanD%4==0)
+//     {
+//       effectiveDirection=pegmanD+1;
+//     }
+//     if(pegmanD%4==2)
+//     {
+//       effectiveDirection=pegmanD+3;
+//     }
+//     if(pegmanD%4==3)
+//     {
+//       effectiveDirection=pegmanD+2;
+//     }
+//     pegmanX++;
+//     command = 'east';
+//     log.push([command, id]);
+//   }
+
+//   if(direction==1)//,eans have to go to north
+//   {
+//       //effection direction mod must be 0 so it points upward
+//       if(pegmanD%4==1)
+//       {
+//         effectiveDirection=pegmanD+3;
+//       }
+//       if(pegmanD%4==2)
+//       {
+//         effectiveDirection=pegmanD+2;
+//       }
+//       if(pegmanD%4==3)
+//       {
+//         effectiveDirection=pegmanD+1;
+//       }
+//       pegmanY--;
+//       command = 'north';
+//       log.push([command, id]);
+//   }
+
+//   if(direction==4)//,eans have to go to south
+//   {
+//       //effection direction mod must be 2 so it points upward
+//       if(pegmanD%4==1)
+//       {
+//         effectiveDirection=pegmanD+1;
+//       }
+//       if(pegmanD%4==3)
+//       {
+//         effectiveDirection=pegmanD+3;
+//       }
+//       if(pegmanD%4==0)
+//       {
+//         effectiveDirection=pegmanD+2;
+//       }
+//       pegmanY++;
+//       command = 'south';
+//       log.push([command, id]);
+//   }
+
+// }
+
 function movefaraz(direction,id)
 {
   //if dir =1 N
@@ -1553,13 +1698,8 @@ function movefaraz(direction,id)
     {
       effectiveDirection=pegmanD+2;
     }
-    pegmanX++;
+    pegmanX--;
     command = 'west';
-    switch (constrainDirection4(effectiveDirection)) {
-      case DirectionType.WEST:
-        pegmanX--;
-        command = 'west';
-        break;}
     log.push([command, id]);
   }
 
@@ -1583,11 +1723,6 @@ function movefaraz(direction,id)
     }
     pegmanX++;
     command = 'east';
-    switch (constrainDirection4(effectiveDirection)) {
-      case DirectionType.EAST:
-        pegmanX++;
-        command = 'east';
-        break;}
     log.push([command, id]);
   }
 
@@ -1606,11 +1741,8 @@ function movefaraz(direction,id)
       {
         effectiveDirection=pegmanD+1;
       }
-      switch (constrainDirection4(effectiveDirection)) {
-        case DirectionType.NORTH:
-          pegmanY--;
-          command = 'north';
-          break;}
+      pegmanY--;
+      command = 'north';
       log.push([command, id]);
   }
 
@@ -1629,11 +1761,8 @@ function movefaraz(direction,id)
       {
         effectiveDirection=pegmanD+2;
       }
-      switch (constrainDirection4(effectiveDirection)) {
-        case DirectionType.SOUTH:
-          pegmanY--;
-          command = 'south';
-          break;}
+      pegmanY++;
+      command = 'south';
       log.push([command, id]);
   }
 
