@@ -1,3 +1,4 @@
+
 #!/usr/bin/python3
 
 # Converts message.json file into en.json and qqq.json files for Translatewiki.

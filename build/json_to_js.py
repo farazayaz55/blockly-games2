@@ -63,7 +63,14 @@ def main():
   language_files.sort()
   languages = []
   for language_file in language_files:
-    language = re.search(r'([\w-]+)\.json$', language_file)[1]
+    print("Language files",language_files)
+    print("TYPES is ",type(language_file))
+    print("language only is ",language_file)
+    lang=re.search(r'([\w-]+)\.json$', language_file)
+    print(lang)
+    print(lang.group(0))
+    # language = re.search(r'([\w-]+)\.json$', language_file)[1]
+    language=lang.group(1)
     if language == 'qqq':
       continue
     if not os.path.isfile(os.path.join(args.blockly_msg_dir, language + '.json')):

@@ -42,16 +42,20 @@ Maze.Blocks.init = function() {
   /**
    * Counterclockwise arrow to be appended to left turn option.
    */
-  const LEFT_TURN = ' ↺';
+  const LEFT_TURN = '<-';
 
   /**
    * Clockwise arrow to be appended to right turn option.
    */
-  const RIGHT_TURN = ' ↻';
+  const RIGHT_TURN = '->';
 
+  const move_DIRECTIONS = [
+    ["North ↑ ", 'moveForward'],
+    ["South ↓", 'moveBackward']
+  ];
   const TURN_DIRECTIONS = [
-    [BlocklyGames.getMsg('Maze.turnLeft', false), 'turnLeft'],
-    [BlocklyGames.getMsg('Maze.turnRight', false), 'turnRight']
+    ["East", 'turnLeft'],
+    ["West", 'turnRight']
   ];
 
   const PATH_DIRECTIONS = [
@@ -64,21 +68,56 @@ Maze.Blocks.init = function() {
   Blockly.Extensions.register('maze_turn_arrows',
       function() {
         const options = this.getField('DIR').getOptions();
+        console.log("Options are",options)
         options[options.length - 2][0] += LEFT_TURN;
         options[options.length - 1][0] += RIGHT_TURN;
       });
 
+    //   Blockly.defineBlocksWithJsonArray([
+    //     {
+    //     "type": "string_length",
+    //     "message0": 'length of %1',
+    //     "args0": [
+    //       {
+    //         "type": "input_value",
+    //         "name": "VALUE",
+    //         "check": "String"
+    //       }
+    //     ],
+    //     "output": "Number",
+    //     "colour": 160,
+    //     "tooltip": "Returns number of letters in the provided text.",
+    //     "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
+      
+    //   }
+    // ]);
+      
+
   Blockly.defineBlocksWithJsonArray([
-    // Block for moving forward.
+    //Block for moving forward.
     {
       "type": "maze_moveForward",
-      "message0": BlocklyGames.getMsg('Maze.moveForward', false),
+      "message0":'%1',
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "DIR",
+          "options": move_DIRECTIONS,
+        },
+      ],
       "previousStatement": null,
       "nextStatement": null,
       "colour": MOVEMENT_HUE,
       "tooltip": BlocklyGames.getMsg('Maze.moveForwardTooltip', false),
     },
-
+    // {
+    //   "type": "maze_moveForward",
+    //   "message0":'South',
+    //   "previousStatement": null,
+    //   "nextStatement": null,
+    //   "colour": MOVEMENT_HUE,
+    //   "tooltip": BlocklyGames.getMsg('Maze.moveForwardTooltip', false),
+    // },
     // Block for turning left or right.
     {
       "type": "maze_turn",
@@ -175,13 +214,15 @@ Maze.Blocks.init = function() {
       "tooltip": BlocklyGames.getMsg('Maze.whileTooltip', false),
     },
   ]);
-};
+ };
 
 
 Blockly.JavaScript['maze_moveForward'] = function(block) {
   // Generate JavaScript for moving forward.
   return `moveForward('block_id_${block.id}');\n`;
 };
+
+
 
 Blockly.JavaScript['maze_turn'] = function(block) {
   // Generate JavaScript for turning left or right.

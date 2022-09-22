@@ -397,7 +397,7 @@ BlocklyGames.normalizeAngle = function(angle) {
 BlocklyGames.getMsg = function(name, escape) {
   let msg = window['BlocklyGamesMsg'][name];
   if (msg === undefined) {
-    msg = '[Unknown message: ${name}]';
+    msg = '[ ${name}]';
   }
   return escape ? BlocklyGames.esc(msg) : msg;
 };

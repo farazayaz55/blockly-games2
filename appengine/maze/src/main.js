@@ -434,7 +434,7 @@ function init() {
   // Render the HTML.
   document.body.innerHTML = Maze.html.start(
       {lang: BlocklyGames.LANG,
-       level: BlocklyGames.LEVEL,
+       level: BlocklyGames.Level,
        maxLevel: BlocklyGames.MAX_LEVEL,
        skin: SKIN_ID,
        html: BlocklyGames.IS_HTML});
@@ -496,7 +496,9 @@ function init() {
   BlocklyInterface.workspace.getAudioManager().load(SKIN.crashSound, 'fail');
   // Not really needed, there are no user-defined functions or variables.
   Blockly.JavaScript.addReservedWords('moveForward,moveBackward,' +
-      'turnRight,turnLeft,isPathForward,isPathRight,isPathBackward,isPathLeft');
+      'turnRight,turnLeft,isPathForward,isPathRight,isPathBackward,isPathLeft'+
+      'moveNorth','moveSouth','moveEast','moveWest'
+      );
 
   drawMap();
 
@@ -950,42 +952,43 @@ function initInterpreter(interpreter, globalObject) {
   // API
   let wrapper;
   wrapper = function(id) {
-    move(0, id);
+    movefaraz(1,id);
   };
   wrap('moveForward');
 
   wrapper = function(id) {
-    move(2, id);
+    movefaraz(4, id);
   };
   wrap('moveBackward');
 
   wrapper = function(id) {
-    turn(0, id);
+    movefaraz(3,id);
   };
   wrap('turnLeft');
 
   wrapper = function(id) {
-    turn(1, id);
+    // turn(1, id);
+    movefaraz(2,id);
   };
   wrap('turnRight');
 
   wrapper = function(id) {
-    return isPath(0, id);
+    return pathFaraz(1, id);
   };
   wrap('isPathForward');
 
   wrapper = function(id) {
-    return isPath(1, id);
+    return pathFaraz(2, id);
   };
   wrap('isPathRight');
 
   wrapper = function(id) {
-    return isPath(2, id);
+    return pathFaraz(4, id);
   };
   wrap('isPathBackward');
 
   wrapper = function(id) {
-    return isPath(3, id);
+    return pathFaraz(3, id);
   };
   wrap('isPathLeft');
 
@@ -1399,12 +1402,249 @@ function constrainDirection16(d) {
  * @throws {true} If the end of the maze is reached.
  * @throws {false} If Pegman collides with a wall.
  */
+
+function pathFaraz(direction,id)
+{
+//if dir =1 N
+  //dir=2 E
+  //dir =3 w
+  //dir =4 south
+  console.log("path faraz is called");
+  console.log("Directions is ",direction);
+  var effectiveDirection;
+  let command;
+  let square;
+  //have to write is path function
+  if(direction==3)//have to check to west
+  {
+    console.log("check to west");
+    console.log(pegmanD);
+    //mod must be 3
+    if(pegmanD%4==0)
+    {
+      effectiveDirection=pegmanD+3;
+    }
+    if(pegmanD%4==2)
+    {
+      effectiveDirection=pegmanD+1;
+    }
+    if(pegmanD%4==1)
+    {
+      effectiveDirection=pegmanD+2;
+    }
+    square = map[pegmanY][pegmanX - 1];
+    command = 'look_west';
+    log.push([command, id]);
+    return square !== SquareType.WALL && square !== undefined;
+  }
+
+
+  if(direction==2)//have to go to east
+  {
+    console.log("checkk to east");
+    console.log(pegmanD);
+    //mod must be 1
+    if(pegmanD%4==0)
+    {
+      effectiveDirection=pegmanD+1;
+    }
+    if(pegmanD%4==2)
+    {
+      effectiveDirection=pegmanD+3;
+    }
+    if(pegmanD%4==3)
+    {
+      effectiveDirection=pegmanD+2;
+    }
+    square=map[pegmanY][pegmanX+1];
+    command = 'look_east';
+    // switch (constrainDirection4(effectiveDirection)) {
+    //   case DirectionType.EAST:
+    //     console.log("Direction type is east");
+    //     square=map[pegmanY][pegmanX+1];
+    //     command = 'look_east';
+    //     break;
+    //   }
+    log.push([command, id]);
+    return square !== SquareType.WALL && square !== undefined;
+  }
+
+  if(direction==1)//,eans have to go to north
+  {
+      //effection direction mod must be 0 so it points upward
+      if(pegmanD%4==1)
+      {
+        effectiveDirection=pegmanD+3;
+      }
+      if(pegmanD%4==2)
+      {
+        effectiveDirection=pegmanD+2;
+      }
+      if(pegmanD%4==3)
+      {
+        effectiveDirection=pegmanD+1;
+      }
+      square = map[pegmanY - 1] && map[pegmanY - 1][pegmanX];
+      command = 'look_north';
+      log.push([command, id]);
+      return square !== SquareType.WALL && square !== undefined;
+  }
+
+  if(direction==4)//,eans have to go to south
+  {
+      //effection direction mod must be 2 so it points upward
+      if(pegmanD%4==1)
+      {
+        effectiveDirection=pegmanD+1;
+      }
+      if(pegmanD%4==3)
+      {
+        effectiveDirection=pegmanD+3;
+      }
+      if(pegmanD%4==0)
+      {
+        effectiveDirection=pegmanD+2;
+      }
+      // switch (constrainDirection4(effectiveDirection)) {
+      //   case DirectionType.SOUTH:
+      //     square=map[pegmanY+1] && map[pegmanY+1][pegmanX]
+      //     command = 'look_north';
+      //     break;
+      //   }
+      square = map[pegmanY + 1] && map[pegmanY + 1][pegmanX];
+      command = 'look_south';
+      if (id) {
+        log.push([command, id]);
+      }
+      return square !== SquareType.WALL && square !== undefined;
+  }
+}
+
+function movefaraz(direction,id)
+{
+  //if dir =1 N
+  //dir=2 E
+  //dir =3 w
+  //dir =4 south
+  console.log("Move faraz is called");
+  console.log("Directions is ",direction);
+  var effectiveDirection;
+  let command;
+  if(!pathFaraz(direction,null)){
+    console.log(direction)
+    console.log("False");
+    throw false;
+  }
+  //have to write is path function
+  if(direction==3)//have to go to west
+  {
+    console.log("move to west");
+    console.log(pegmanD);
+    //mod must be 3
+    if(pegmanD%4==0)
+    {
+      effectiveDirection=pegmanD+3;
+    }
+    if(pegmanD%4==2)
+    {
+      effectiveDirection=pegmanD+1;
+    }
+    if(pegmanD%4==1)
+    {
+      effectiveDirection=pegmanD+2;
+    }
+    pegmanX++;
+    command = 'west';
+    switch (constrainDirection4(effectiveDirection)) {
+      case DirectionType.WEST:
+        pegmanX--;
+        command = 'west';
+        break;}
+    log.push([command, id]);
+  }
+
+
+  if(direction==2)//have to go to east
+  {
+    console.log("move to east");
+    console.log(pegmanD);
+    //mod must be 1
+    if(pegmanD%4==0)
+    {
+      effectiveDirection=pegmanD+1;
+    }
+    if(pegmanD%4==2)
+    {
+      effectiveDirection=pegmanD+3;
+    }
+    if(pegmanD%4==3)
+    {
+      effectiveDirection=pegmanD+2;
+    }
+    pegmanX++;
+    command = 'east';
+    switch (constrainDirection4(effectiveDirection)) {
+      case DirectionType.EAST:
+        pegmanX++;
+        command = 'east';
+        break;}
+    log.push([command, id]);
+  }
+
+  if(direction==1)//,eans have to go to north
+  {
+      //effection direction mod must be 0 so it points upward
+      if(pegmanD%4==1)
+      {
+        effectiveDirection=pegmanD+3;
+      }
+      if(pegmanD%4==2)
+      {
+        effectiveDirection=pegmanD+2;
+      }
+      if(pegmanD%4==3)
+      {
+        effectiveDirection=pegmanD+1;
+      }
+      switch (constrainDirection4(effectiveDirection)) {
+        case DirectionType.NORTH:
+          pegmanY--;
+          command = 'north';
+          break;}
+      log.push([command, id]);
+  }
+
+  if(direction==4)//,eans have to go to south
+  {
+      //effection direction mod must be 2 so it points upward
+      if(pegmanD%4==1)
+      {
+        effectiveDirection=pegmanD+1;
+      }
+      if(pegmanD%4==3)
+      {
+        effectiveDirection=pegmanD+3;
+      }
+      if(pegmanD%4==0)
+      {
+        effectiveDirection=pegmanD+2;
+      }
+      switch (constrainDirection4(effectiveDirection)) {
+        case DirectionType.SOUTH:
+          pegmanY--;
+          command = 'south';
+          break;}
+      log.push([command, id]);
+  }
+
+}
+
 function move(direction, id) {
   if (!isPath(direction, null)) {
     log.push(['fail_' + (direction ? 'backward' : 'forward'), id]);
     throw false;
   }
-  // If moving backward, flip the effective direction.
+  // If moving backward, flip the effective direction. if you add 2 in pegmanD(0,1,2,3) 
   const effectiveDirection = pegmanD + direction;
   let command;
   switch (constrainDirection4(effectiveDirection)) {

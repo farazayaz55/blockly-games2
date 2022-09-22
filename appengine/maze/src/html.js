@@ -23,8 +23,7 @@ goog.require('BlocklyGames.html');
  */
 Maze.html.start = function(ij) {
   return `
-${BlocklyGames.html.headerBar(ij, BlocklyGames.getMsg('Games.maze', true), '', true, false,
-    '<button id="pegmanButton"><img src="common/1x1.gif"><span id="pegmanButtonArrow"></span></button>')}
+   
 
 <div id="visualization">
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svgMaze" width="400px" height="400px">
@@ -39,6 +38,7 @@ ${BlocklyGames.html.headerBar(ij, BlocklyGames.getMsg('Games.maze', true), '', t
   </div>
 </div>
 
+
 <table width=400>
   <tr>
     <td style="width: 190px; text-align: center; vertical-align: top;">
@@ -52,7 +52,10 @@ ${BlocklyGames.html.headerBar(ij, BlocklyGames.getMsg('Games.maze', true), '', t
     </td>
   </tr>
 </table>
-
+<button disabled id="pegmanButton">
+<img src="common/1x1.gif">
+<span id="pegmanButtonArrow"></span>
+</button>
 ${Maze.html.toolbox_(ij.level)}
 <div id="blockly"></div>
 
@@ -65,6 +68,8 @@ ${BlocklyGames.html.storageDialog()}
 
 ${Maze.html.helpDialogs_()}
 `;
+
+
 };
 
 /**
