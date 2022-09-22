@@ -64,9 +64,9 @@ const SKINS = [
   // crashSound: List of sounds (in various formats) for player crashes.
   // crashType: Behaviour when player crashes (stop, spin, or fall).
   {
-    sprite: 'maze/pegman.png',
-    tiles: 'maze/tiles_pegman.png',
-    background: false,
+    sprite: 'maze/avatar.png',
+    tiles: 'maze/tiles.png',
+    background: 'maze/background.png',
     look: '#000',
     winSound: ['maze/win.mp3', 'maze/win.ogg'],
     crashSound: ['maze/fail_pegman.mp3', 'maze/fail_pegman.ogg'],
@@ -402,7 +402,7 @@ function drawMap() {
       'width': 20
     }, svg);
   finishMarker.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
-      'maze/marker.png');
+      'maze/goalIdle.gif');
 
   // Pegman's clipPath element, whose (x, y) is reset by displayPegman
   const pegmanClip = Blockly.utils.dom.createSvgElement('clipPath', {
