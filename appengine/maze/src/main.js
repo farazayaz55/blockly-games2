@@ -978,7 +978,7 @@ function initInterpreter(interpreter, globalObject) {
         movefaraz(4,id);
       }
     }
-    if(pathFaraz(2,null))
+    else if(pathFaraz(2,null))
     {
       console.log("YOU CAN GO right");
       //you can go 1
@@ -987,7 +987,7 @@ function initInterpreter(interpreter, globalObject) {
         movefaraz(3,id);
       }
     }
-    if(pathFaraz(3,null))
+    else if(pathFaraz(3,null))
     {
         //you can go 1
         for(let i=1;i<=3;i++){
@@ -995,7 +995,7 @@ function initInterpreter(interpreter, globalObject) {
           movefaraz(2,id);
         }
     }
-    if(pathFaraz(4,null))
+    else if(pathFaraz(4,null))
     {
         //you can go 1
         for(let i=1;i<=3;i++){
